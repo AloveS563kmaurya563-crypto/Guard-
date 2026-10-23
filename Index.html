@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b1020">
+<title>FocusGuard - Class 10 Focus Planner</title>
+
+<style>
+:root {
+--bg: #0b1020;
+--panel: #141c33;
+--text: #f4f7ff;
+--muted: #a8b4d2;
+--line: #2a385d;
+--blue: #6685ff;
+--violet: #9a69ff;
+--green: #38d9a9;
+--red: #ff6f86;
+}
+
+• {
+box-sizing: border-box;
+}
+
+body {
+margin: 0;
+background: radial-gradient(ellipse at top, #1a2450, #0b1020 65%);
+color: var(--text);
+font-family: Arial, sans-serif;
+line-height: 1.5;
+}
+
+.container {
+max-width: 1100px;
+margin: auto;
+padding: 18px;
+}
+
+header {
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 12px;
+flex-wrap: wrap;
+margin-bottom: 20px;
+}
+
+.brand {
+display: flex;
+align-items: center;
+gap: 12px;
+}
+
+.logo {
+width: 48px;
+height: 48px;
+display: grid;
+place-items: center;
+border-radius: 15px;
+background: linear-gradient(135deg, var(--blue), var(--violet));
+font-size: 25px;
+}
+
+h1 {
+font-size: 24px;
+margin: 0;
+}
+
+.subtitle,
+.muted {
+color: var(--muted);
+font-size: 13px;
+}
+
+.badge {
+display: inline-block;
+background: #202d4c;
+border: 1px solid var(--line);
+border-radius: 20px;
+padding: 7px 12px;
+font-size: 12px;
+}
+
+.hero {
+display: grid;
+grid-template-columns: 1.3fr .7fr;
+gap: 15px;
+margin-bottom: 15px;
+}
+
+.card {
+background: linear-gradient(145deg, #17213c, #11182c);
+border: 1px solid var(--line);
+border-radius: 18px;
+padding: 20px;
+margin-bottom: 15px;
+}
+
+.hero h2 {
+font-size: clamp(27px, 4vw, 40px);
+line-height: 1.15;
+}
+
+.highlight {
+color: #9a9cff;
+}
+
+.grid {
+display: grid;
+grid-template-columns: repeat(2, minmax(0, 1fr));
+gap: 15px;
+}
+
+h3 {
+margin-top: 0;
+}
+
+button {
+border: 0;
+border-radius: 10px;
+padding: 11px 15px;
+background: linear-gradient(100deg, var(--blue), var(--violet));
+color: white;
+font-weight: bold;
+cursor: pointer;
+margin: 3px;
+}
+
+button.secondary {
+background: #202d4c;
+border: 1px solid var(--line);
+}
+
+button.danger {
+background: #54283a;
+}
+
+input,
+select {
+width: 100%;
+padding: 10px;
+margin: 5px 0 12px;
+color: white;
+background: #0c1428;
+border: 1px solid #334364;
+border-radius: 9px;
+}
+
+input[type="checkbox"],
+input[type="range"] {
+width: auto;
+}
+
+label {
+display: block;
+color: #d6def4;
+font-size: 13px;
+}
+
+.stat {
+font-size: 32px;
+font-weight: bold;
+}
+
+.row {
+display: flex;
+justify-content: space-between;
+align-items: center;
+gap: 10px;
+}
+
+.progress {
+height: 10px;
+background: #273454;
+border-radius: 20px;
+overflow: hidden;
+margin: 10px 0;
+}
+
+.progress span {
+display: block;
+height: 100%;
+width: 0;
+background: linear-gradient(90deg, var(--green), var(--blue));
+transition: width .2s;
+}
+
+.slot {
+display: flex;
+gap: 12px;
+padding: 11px;
+margin: 8px 0;
+border-radius: 10px;
+background: #101a31;
+border: 1px solid #263454;
+}
+
+.time {
+min-width: 105px;
+color: #9eb3ff;
+font-size: 12px;
+font-weight: bold;
+}
+
+.slot strong {
+display: block;
+font-size: 13px;
+}
+
+.slot small {
+color: var(--muted);
+}
+
+.clock {
+text-align: center;
+font-size: 52px;
+font-weight: bold;
+margin: 12px 0;
+}
+
+.center {
+text-align: center;
+}
+
+.limit {
+background: #10192f;
+padding: 12px;
+border: 1px solid var(--line);
+border-radius: 12px;
+margin: 10px 0;
+}
+
+.notice {
+background: #2a2419;
+color: #ffe1a0;
+border: 1px solid #6e5930;
+border-radius: 10px;
+padding: 12px;
+font-size: 12px;
+margin-top: 12px;
+}
+
+.tip {
+background: #102c2b;
+color: #b9ffe9;
+border: 1px solid #286c5a;
+border-radius: 10px;
+padding: 12px;
+}
+
+.task {
+display: flex;
+align-items: flex-start;
+gap: 10px;
+padding: 9px 0;
+border-bottom: 1px solid #263454;
+}
+
+.task input {
+margin-top: 5px;
+}
+
+.task.done span {
+text-decoration: line-through;
+color: #8795b4;
+}
+
+footer {
+text-align: center;
+color: #8392b5;
+font-size: 12px;
+padding: 20px 0;
+}
+
+@media(max-width: 700px) {
+.hero,
+.grid {
+grid-template-columns: 1fr;
+}
+
+.card {
+padding: 15px;
+}
+
+.time {
+min-width: 95px;
+}
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<header>
+<div class="brand">
+<div class="logo">🛡️</div>
+<div>
+<h1>FocusGuard</h1>
+<div class="subtitle">Class 10 Board Focus Planner</div>
+</div>
+</div>
+<div class="badge" id="today">Today's Focus</div>
+</header>
+
+<section class="hero">
+<div class="card">
+<div class="badge">YOUR FUTURE MATTERS</div>
+<h2>Protect Your Focus.<br>
+<span class="highlight">Build Your Future.</span>
+</h2>
+<p class="muted">
+Reduce unnecessary scrolling, complete your study goals
+and build better daily habits.
+</p>
+
+<button onclick="enableNotifications()">
+Enable Reminders
+</button>
+
+<button class="secondary" onclick="startFocus()">
+Start Focus
+</button>
+
+<p class="muted">
+Your settings are saved on this device.
+</p>
+</div>
+
+<div class="card">
+<h3>📚 Study Progress</h3>
+<div class="muted">Self-study completed</div>
+<div class="stat"><span id="studyDone">0</span> min</div>
+
+<div class="progress">
+<span id="studyBar"></span>
+</div>
+
+<div class="row">
+<span class="muted">Daily study target</span>
+<strong id="studyGoalLabel">180 min</strong>
+</div>
+
+<br>
+
+<div class="row">
+<span class="muted">Focus sessions</span>
+<strong id="sessions">0</strong>
+</div>
+</div>
+</section>
+
+<section class="grid">
+
+<div class="card">
+<h3>📅 Daily Study Timetable</h3>
+
+<div class="slot">
+<div class="time">5:00–6:00 AM</div>
+<div>
+<strong>Morning Deep Study</strong>
+<small>Maths or Science practice</small>
+</div>
+</div>
+
+<div class="slot">
+<div class="time">After School</div>
+<div>
+<strong>Rest and Lunch</strong>
+<small>Take a proper break</small>
+</div>
+</div>
+
+<div class="slot">
+<div class="time">4:00–5:00 PM</div>
+<div>
+<strong>PW Backlog</strong>
+<small>Complete pending lectures and notes</small>
+</div>
+</div>
+
+<div class="slot">
+<div class="time">5:00–8:30 PM</div>
+<div>
+<strong>PW Live Classes</strong>
+<small>Attend class and make notes</small>
+</div>
+</div>
+
+<div class="slot">
+<div class="time">8:30–9:00 PM</div>
+<div>
+<strong>Dinner and Rest</strong>
+<small>Take a break after classes</small>
+</div>
+</div>
+
+<div class="slot">
+<div class="time">9:00–9:30 PM</div>
+<div>
+<strong>Quick Revision</strong>
+<small>Review important concepts and formulas</small>
+</div>
+</div>
+
+<div class="slot">
+<div class="time">10:00 PM</div>
+<div>
+<strong>Wind Down and Sleep</strong>
+<small>Keep a consistent sleep schedule</small>
+</div>
+</div>
+
+<p class="muted">
+Adjust the morning and school timings to your actual routine.
+</p>
+</div>
+
+<div class="card">
+<h3>⏱️ Screen-Time Limits</h3>
+
+<p class="muted">
+Customize your daily entertainment budget.
+</p>
+
+<div class="limit">
+<label>Instagram budget (minutes)</label>
+<input id="instagramLimit" type="number"
+min="0" max="300" value="20">
+<small class="muted">
+Chatting and Reels cannot be distinguished by this webpage.
+</small>
+</div>
+
+<div class="limit">
+<label>YouTube / Shorts (minutes)</label>
+<input id="youtubeLimit" type="number"
+min="0" max="300" value="30">
+</div>
+
+<div class="limit">
+<label>Games (minutes)</label>
+<input id="gamesLimit" type="number"
+min="0" max="300" value="30">
+</div>
+
+<div class="limit">
+<label>Other entertainment (minutes)</label>
+<input id="otherLimit" type="number"
+min="0" max="300" value="10">
+</div>
+
+<label>Total entertainment budget (minutes)</label>
+<input id="budget" type="number" min="0" max="600" value="90">
+
+<label>Daily self-study goal (minutes)</label>
+<input id="target" type="number" min="30" max="600" value="180">
+
+<button onclick="saveSettings()">Save Settings</button>
+
+<button class="secondary" onclick="addUsage()">
+Log Entertainment Time
+</button>
+
+<div class="notice">
+Important: These limits are saved settings and reminders.
+They do not automatically track or block other apps.
+Real app blocking requires additional Android development.
+</div>
+</div>
+
+<div class="card" id="focusPanel">
+<h3>🎯 Focus Timer</h3>
+
+<label>Choose session</label>
+<select id="mode" onchange="changeMode()">
+<option value="25">Study — 25 minutes</option>
+<option value="5">Short Break — 5 minutes</option>
+<option value="50">PW Backlog — 50 minutes</option>
+<option value="30">Revision — 30 minutes</option>
+</select>
+
+<div class="clock" id="clock">25:00</div>
+
+<div class="progress">
+<span id="timerBar"></span>
+</div>
+
+<div class="center">
+<button onclick="startTimer()">Start</button>
+<button class="secondary" onclick="pauseTimer()">Pause</button>
+<button class="secondary" onclick="resetTimer()">Reset</button>
+</div>
+
+<p class="muted center" id="timerStatus">
+Ready when you are!
+</p>
+
+<div class="tip">
+<strong>Study Tip 💡</strong><br>
+Put your phone away during a study session.
+Focus on one topic at a time and practise questions
+after completing a chapter.
+</div>
+</div>
+
+<div class="card">
+<h3>✅ Today's Checklist</h3>
+
+<label class="task">
+<input type="checkbox" data-task="morning">
+<span>Complete morning study</span>
+</label>
+
+<label class="task">
+<input type="checkbox" data-task="backlog">
+<span>Complete PW backlog from 4–5 PM</span>
+</label>
+
+<label class="task">
+<input type="checkbox" data-task="live">
+<span>Attend PW live classes</span>
+</label>
+
+<label class="task">
+<input type="checkbox" data-task="revision">
+<span>Revise today's class notes</span>
+</label>
+
+<label class="task">
+<input type="checkbox" data-task="practice">
+<span>Practise board-style questions</span>
+</label>
+
+<label class="task">
+<input type="checkbox" data-task="tomorrow">
+<span>Plan tomorrow's study tasks</span>
+</label>
+
+<div class="progress">
+<span id="taskBar"></span>
+</div>
+
+<div class="row">
+<span class="muted">Tasks completed</span>
+<strong id="taskCount">0 / 6</strong>
+</div>
+</div>
+
+<div class="card">
+<h3>📊 Daily Focus Report</h3>
+
+<div class="row">
+<span class="muted">Entertainment used</span>
+<strong id="used">0 min</strong>
+</div>
+
+<div class="progress">
+<span id="budgetBar"></span>
+</div>
+
+<div class="row">
+<span class="muted">Budget remaining</span>
+<strong id="remaining">90 min</strong>
+</div>
+
+<br>
+
+<button class="secondary" onclick="exportData()">
+Export Settings
+</button>
+
+<button class="danger" onclick="resetToday()">
+Reset Today's Progress
+</button>
+
+<div class="tip" style="margin-top:15px">
+Remember: Consistent study, enough sleep and regular breaks
+are more useful than forcing yourself to study all day.
+</div>
+</div>
+
+</section>
+
+<footer>
+FocusGuard · Your Time, Your Future.<br>
+Web prototype — Android app controls require native implementation.
+</footer>
+
+</div>
+
+<script>
+const $` = id => document.getElementById(id);
+
+const defaults = {
+instagramLimit: 20,
+youtubeLimit: 30,
+gamesLimit: 30,
+otherLimit: 10,
+budget: 90,
+target: 180,
+studyDone: 0,
+used: 0,
+sessions: 0,
+tasks: {},
+date: new Date().toLocaleDateString()
+};
+
+let data;
+
+try {
+data = JSON.parse(localStorage.getItem("focusGuardData")) || defaults;
+} catch (e) {
+data = {...defaults};
+}
+
+if (data.date !== new Date().toLocaleDateString()) {
+data = {
+...data,
+studyDone: 0,
+used: 0,
+sessions: 0,
+tasks: {},
+date: new Date().toLocaleDateString()
+};
+}
+
+function persist() {
+data.date = new Date().toLocaleDateString();
+localStorage.setItem("focusGuardData", JSON.stringify(data));
+render();
+}
+
+function loadSettings() {
+[
+"instagramLimit",
+"youtubeLimit",
+"gamesLimit",
+"otherLimit",
+"budget",
+"target"
+ ].forEach(id => {
+`$(id).value = data[id] ?? defaults[id];
+});
+}
+
+function saveSettings() {
+[
+"instagramLimit",
+"youtubeLimit",
+"gamesLimit",
+"otherLimit",
+"budget",
+"target"
+ ].forEach(id => {
+const value = Number($`(id).value);
+
+data[id] = Number.isFinite(value)
+? Math.max(0, Math.min(600, value))
+: defaults[id];
+});
+
+persist();
+alert("FocusGuard settings saved!");
+}
+
+function render() {
+`$("today").textContent =
+new Date().toLocaleDateString(undefined, {
+weekday: "short",
+month: "short",
+day: "numeric"
+});
+
+("studyGoalLabel").textContent = data.target + " min";
+$`("sessions").textContent = data.sessions;
+
+`$("studyBar").style.width =
+Math.min(100, data.studyDone / Math.max(1, data.target) * 100) + "%";
+
+("remaining").textContent =
+Math.max(0, data.budget - data.used) + " min";
+
+$`("budgetBar").style.width =
+Math.min(100, data.used / Math.max(1, data.budget) * 100) + "%";
+
+const checks = [...document.querySelectorAll("[data-task]")];
+let completed = 0;
+
+checks.forEach(check => {
+check.checked = !!data.tasks[check.dataset.task];
+check.closest(".task").classList.toggle("done", check.checked);
+
+if (check.checked) completed++;
+});
+
+$("taskCount").textContent = completed + " / " + checks.length; $("taskBar").style.width =
+completed / checks.length * 100 + "%";
+}
+
+document.querySelectorAll("[data-task]").forEach(check => {
+check.addEventListener("change", () => {
+data.tasks[check.dataset.task] = check.checked;
+persist();
+});
+});
+
+function addUsage() {
+const input = prompt(
+"How many minutes of entertainment did you use?"
+);
+
+if (input === null || input.trim() === "") return;
+
+const minutes = Number(input);
+
+if (!Number.isFinite(minutes) || minutes < 0) {
+alert("Enter a valid number of minutes.");
+return;
+}
+
+data.used += Math.round(minutes);
+persist();
+
+if (data.used >= data.budget) {
+notifyUser(
+"Entertainment budget reached",
+"Your daily entertainment budget is over. Consider returning to your priorities."
+);
+} else {
+alert("Entertainment time logged.");
+}
+}
+
+async function enableNotifications() {
+if (!("Notification" in window)) {
+alert("Notifications are not supported by this browser.");
+return;
+}
+
+const permission = await Notification.requestPermission();
+
+if (permission === "granted") {
+alert("Notifications enabled. Keep the webpage open for timer alerts.");
+} else {
+alert("Notifications were not enabled.");
+}
+}
+
+function notifyUser(title, message) {
+if ("Notification" in window &&
+Notification.permission === "granted") {
+new Notification(title, {body: message});
+} else {
+alert(title + "\n\n" + message);
+}
+}
+
+/* Focus timer */
+
+let totalSeconds = 25 * 60;
+let remainingSeconds = totalSeconds;
+let timer = null;
+
+function displayTimer() {
+const mins = Math.floor(remainingSeconds / 60);
+const secs = remainingSeconds % 60;
+
+`$("clock").textContent =
+String(mins).padStart(2, "0") + ":" +
+String(secs).padStart(2, "0");
+
+$`("timerBar").style.width =
+((totalSeconds - remainingSeconds) / totalSeconds * 100) + "%";
+}
+
+function changeMode() {
+pauseTimer();
+
+totalSeconds = Number(`$("mode").value) * 60;
+remainingSeconds = totalSeconds;
+
+$`("timerStatus").textContent = "Ready when you are!";
+displayTimer();
+}
+
+function startTimer() {
+if (timer) return;
+
+`$("timerStatus").textContent = "Focus session running.";
+
+timer = setInterval(() => {
+remainingSeconds--;
+displayTimer();
+
+if (remainingSeconds <= 0) {
+pauseTimer();
+
+const isBreak = $`("mode").value === "5";
+
+if (!isBreak) {
+data.studyDone += Number(`$("mode").value);
+data.sessions++;
+persist();
+}
+
+$`("timerStatus").textContent = "Session completed!";
+
+notifyUser(
+isBreak ? "Break finished" : "Focus session completed",
+isBreak
+? "Your break is over. Return to your next task when ready."
+: "Great work! Take a short break before your next session."
+);
+}
+}, 1000);
+}
+
+function pauseTimer() {
+if (timer) clearInterval(timer);
+timer = null;
+}
+
+function resetTimer() {
+pauseTimer();
+totalSeconds = Number($("mode").value) * 60; remainingSeconds = totalSeconds; $("timerStatus").textContent = "Timer reset.";
+displayTimer();
+}
+
+function startFocus() {
+`$("focusPanel").scrollIntoView({
+behavior: "smooth",
+block: "center"
+});
+}
+
+function resetToday() {
+if (!confirm("Reset today's progress? Your saved limits will remain.")) {
+return;
+}
+
+data.studyDone = 0;
+data.used = 0;
+data.sessions = 0;
+data.tasks = {};
+
+persist();
+}
+
+function exportData() {
+const blob = new Blob(
+[JSON.stringify(data, null, 2)],
+{type: "application/json"}
+);
+
+const url = URL.createObjectURL(blob);
+const link = document.createElement("a");
+
+link.href = url;
+link.download = "focusguard-settings.json";
+link.click();
+
+URL.revokeObjectURL(url);
+}
+
+loadSettings();
+render();
+displayTimer();
+</script>
+
+</body>
+</html>
